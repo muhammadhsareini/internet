@@ -20,7 +20,7 @@ def runDNS(webServerIP):
 	print("Running DNS Server", socket.gethostbyname(socket.gethostname()))
 
 	while True:
-		data, addr = s.recvfrom(1024)
+		data, addr = s.recvfrom(BUFFER_SIZE)
 		# convert to hex 
 		domain = str(parse_packet(data)).strip()
 		# print("searching domain")
