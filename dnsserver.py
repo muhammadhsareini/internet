@@ -12,7 +12,7 @@ def runDNS(webServerIP):
 
 	## dns lookup table
 	table = {}
-	table['blacksite.secret'.encode()] = webServerIP
+	table["blacksite.secret"] = webServerIP
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # set up udp
 	s.bind((UDP_IP, UDP_PORT))
@@ -21,8 +21,7 @@ def runDNS(webServerIP):
 
 	while True:
 		data, addr = s.recvfrom(BUFFER_SIZE)
-		# convert to hex 
-		domain = str(parse_packet(data)).strip()
+		domain = parse_packet(data)
 		# print("searching domain")
 		# print(domain)
 		# print(domain == "blacksitesecret")
@@ -39,14 +38,16 @@ def runDNS(webServerIP):
 
 ## parse packet and return relevant data
 def parse_packet(data):
-	print(data)
-	# d = binascii.hexlify(data).decode("ascii")
-	# d = binascii.hexlify(data)
-	# transaction_id = d[0:4]
-	# flags = d[4:8]
-	# query = d[26:]
-	# query_name = query[:-4]
-	# # print(type(domain))
+	hex_form = data.hex()
+	print("hex:")
+	print(hex_form)
+	print("binary:")
+	# print(bytes.fromhex(hex_form))
+	transaction_id = hex_form[0:4]
+	flags = hex_form[4:8]
+	query = hex_form[26:]
+	query_name = query[:-4]
+	print(query_name)
 	# return query_name
 
 
