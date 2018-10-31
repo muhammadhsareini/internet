@@ -39,22 +39,32 @@ def runDNS(webServerIP):
 ## parse packet and return relevant data
 def parse_packet(data):
 	hex_form = data.hex()
-	print("hex:")
-	print(hex_form)
-	print("binary:")
+	# print("hex:")
+	# print(hex_form)
+	# print("binary:")
 	# print(bytes.fromhex(hex_form))
 	transaction_id = hex_form[0:4]
 	flags = hex_form[4:8]
-	query = hex_form[26:]
-	query_name = query[:-4]
-	print(query_name)
+	query = hex_form[25:]
+	print(query)
+	domain = []
+	total = 0
+	count = int(query[total], 16)
+	while count != 0:
+		domain.append("".join(query[total+1:total+count]))
+		total += count
+		count = int(query[total+count], 16)
+	domain = ".".join(domain)
+
+	print("domain name", bytes.fromhex(domain).decode('utf-8'))
+
 	# return query_name
 
 
 
 ## craft the response packeet 
 def response_packet(data, domain, ip):
-	return
+	return none
 
 def main(args):
     webServerIP= args[1]
