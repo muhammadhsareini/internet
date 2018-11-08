@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import socket
 import sys
 import binascii
@@ -6,7 +8,7 @@ UDP_IP = ''
 UDP_PORT = 53
 BUFFER_SIZE = 4096
 
-## only works in python2
+
 
 def runDNS(webServerIP):
 
@@ -22,6 +24,10 @@ def runDNS(webServerIP):
 	while True:
 		data, addr = s.recvfrom(BUFFER_SIZE)
 		domain = parse_packet(data)
+		if domain in table:
+			print(domain + " : " + table[domain])
+		else:
+			print(domain + " not in DNS server")
 		# print("searching domain")
 		# print(domain)
 		# print(domain == "blacksitesecret")
@@ -45,18 +51,26 @@ def parse_packet(data):
 	# print(bytes.fromhex(hex_form))
 	transaction_id = hex_form[0:4]
 	flags = hex_form[4:8]
-	query = hex_form[25:]
-	print(query)
+	query = hex_form[24:]
+	query += '00'
+	# print(query)
 	domain = []
-	total = 0
-	count = int(query[total], 16)
+	total = 2
+	count = int(query[0:2], 16) * 2
+	# print('count', count)
 	while count != 0:
-		domain.append("".join(query[total+1:total+count]))
+		domain.append("".join(query[total:total+count]))
 		total += count
-		count = int(query[total+count], 16)
-	domain = ".".join(domain)
+		# print(total)
+		count = int(query[total:total+2], 16) * 2
+		total+=2
+		# print('count2: ', count)
+		# print(domain)
+	domain = "2E".join(domain)
 
-	print("domain name", bytes.fromhex(domain).decode('utf-8'))
+	domain = bytes.fromhex(domain).decode('utf-8')
+	return domain
+	# print("domain name", bytes.fromhex(domain).decode('utf-8'))
 
 	# return query_name
 
