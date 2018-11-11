@@ -13,8 +13,7 @@ BUFFER_SIZE = 4096
 def runDNS(webServerIP):
 
 	## dns lookup table
-	table = {"google.com" : "8.8.8.8", "www.google.com" : "8.8.8.8"}
-	table["blacksite.secret"] = webServerIP
+	table = {"google.com" : "8.8.8.8", "www.google.com" : "8.8.8.8","blacksite.secret" : webServerIP}
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # set up udp
 	s.bind((UDP_IP, UDP_PORT))
@@ -23,7 +22,7 @@ def runDNS(webServerIP):
 
 	while True:
 		data, addr = s.recvfrom(BUFFER_SIZE)
-		print(addr)
+		# print(addr)
 		domain = parse_packet(data)
 
 		query = domain[1]
@@ -37,8 +36,8 @@ def runDNS(webServerIP):
 			# the dns request
 			id = query[:4]
 			# change flags for response
-			response_flags = "8580"
-			updated_response = id + response_flags + query[8:]
+			response_flags = "8180"
+			updated_response = id + response_flags + "0001000100000000" + query[16:]
 			# add the "answer" part to the response
 
 			# add all info until ip
@@ -57,11 +56,15 @@ def runDNS(webServerIP):
 
 				hex_ip += hex_num
 
-			print(hex_ip)
+			# print(hex_ip)
 			updated_response+=hex_ip
-			print(updated_response)
-			packet = bytes.fromhex(updated_response.upper())
 
+			updated_response = updated_response.upper()
+			print(updated_response)
+
+			packet = bytes.fromhex(updated_response)
+			
+			
 			## send the packet
 			s.sendto(packet,addr)
 
