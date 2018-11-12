@@ -34,13 +34,12 @@ def runDNS(webServerIP):
 			## send a DNS packet response
 
 			# the dns request
-			trans_id = data.hex()
-			# trans_id = bytes.fromhex(trans_id).decode('utf-8')
+			trans_id = query[:4]
 			# change flags for response
 			print('original query', query)
 			response_flags = "8180"
-			updated_response = trans_id + response_flags + "0001000100000000" + query
-			# updated_response = trans_id + response_flags + "0001000100000000" + query[16:]
+			# updated_response = trans_id + response_flags + "0001000100000000" + query
+			updated_response = trans_id + response_flags + "0001000100000000" + query[24:]
 			# add the "answer" part to the response
 
 			# add all info until ip
@@ -97,7 +96,7 @@ def parse_packet(data):
 	# join on ".", but represent in hex 
 	domain = "2E".join(domain)
 	domain = bytes.fromhex(domain).decode('utf-8')
-	return domain, query
+	return domain, hex_form
 
 
 def main(args):
