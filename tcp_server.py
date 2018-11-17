@@ -2,7 +2,8 @@
 
 import socket
 import sys
-import pyaudio
+import sounddevice as sd
+import numpy as np
 
 TCP_IP = ''
 TCP_PORT = 4000
@@ -18,16 +19,12 @@ def runWebServer():
 	while True:
 		conn, addr = s.accept() #get IP and port for connecting application
 
-		data = conn.recv(BUFFER_SIZE)
-		print("Received data:\n", data, "\n")
+		data = bytearray(conn.recv(BUFFER_SIZE))
 
-		httpResponse = """HTTP/1.1 200 OK
-		Content-Type: text/html
+		## play bytes on sound card
+		print(data)
+		sd.play(data)
 
-Webserver; Hello World """
-
-
-		conn.send(httpResponse.encode())
 
         
 		conn.close()
