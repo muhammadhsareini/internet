@@ -2,7 +2,6 @@
 
 import socket
 import sys
-import sounddevice as sd
 
 TCP_IP = ''
 TCP_PORT = 4000
@@ -13,17 +12,13 @@ def runWebServer():
 	s.bind((TCP_IP, TCP_PORT))
 	s.listen(5) #arbitrary value I think
 
-	print("Running TCP Server", socket.gethostbyname(socket.gethostname()))
+	print("Running TCP Client", socket.gethostbyname(socket.gethostname()))
 
 	while True:
 		conn, addr = s.accept() #get IP and port for connecting application
 
-		data = bytearray(conn.recv(BUFFER_SIZE))
-
-		## play bytes on sound card
-		print(data)
-		sd.play(data)
-
+		data = conn.recv(BUFFER_SIZE)
+		print("Received data:\n", data, "\n")
 
         
 		conn.close()
@@ -36,5 +31,5 @@ if __name__ == "__main__":
     main(sys.argv)
 
 #gotta figure out how this works
-# def sendToSound(data):
+def sendToSound(data):
     
