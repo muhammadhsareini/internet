@@ -3,7 +3,6 @@
 import socket
 import sys
 import sounddevice as sd
-import numpy as np
 
 TCP_IP = ''
 TCP_PORT = 4000
