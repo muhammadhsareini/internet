@@ -2,6 +2,7 @@
 
 import socket
 import sys
+import pyaudio
 
 TCP_IP = ''
 TCP_PORT = 4000
@@ -20,6 +21,14 @@ def runWebServer():
 		data = conn.recv(BUFFER_SIZE)
 		print("Received data:\n", data, "\n")
 
+		httpResponse = """HTTP/1.1 200 OK
+		Content-Type: text/html
+
+Webserver; Hello World """
+
+
+		conn.send(httpResponse.encode())
+
         
 		conn.close()
 
@@ -31,5 +40,5 @@ if __name__ == "__main__":
     main(sys.argv)
 
 #gotta figure out how this works
-def sendToSound(data):
+# def sendToSound(data):
     
