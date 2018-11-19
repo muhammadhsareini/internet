@@ -4,6 +4,7 @@ import socket
 import sys
 import sounddevice as sd
 import numpy as np
+import random
 
 TCP_IP = ''
 TCP_PORT = 4000
@@ -23,6 +24,24 @@ def runWebServer():
 
 		## play bytes on sound card
 		print(data)
+
+		#custom packet structure
+
+
+		#generate key file
+
+		with open('key.txt', 'w+') as pad:
+			bits = ['0', '1']
+			key = ""
+			for x in range(len(data)):
+				key += bits[random.randint(0, 1)]
+			pad.write(key)
+
+		#encrypt data
+		key = bytearray(key.encode('ascii'))
+		data = data ^ key
+		print('data after pad', data)
+
 		sd.play(data)
 
 
