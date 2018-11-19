@@ -39,6 +39,9 @@ def runWebServer():
 
 		#encrypt data
 		key = bytearray(key.encode('ascii'))
+		newdata = []
+		for byte in len(data):
+			newdata.append(str())
 		data = data ^ key
 		print('data after pad', data)
 
