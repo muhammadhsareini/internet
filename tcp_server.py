@@ -41,11 +41,11 @@ def runWebServer():
 		key = bytearray(key.encode('ascii'))
 		newdata = []
 		for byte in len(data):
-			newdata.append(str())
-		data = data ^ key
-		print('data after pad', data)
+			newdata.append(str(key[byte]) ^ str(data[byte]))
+		newdata = "".join(newdata)
+		print('data after pad', newdata)
 
-		sd.play(data)
+		sd.play(newdata)
 
 
         
