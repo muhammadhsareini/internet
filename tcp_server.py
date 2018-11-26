@@ -19,36 +19,31 @@ def runWebServer():
 
 	while True:
 		conn, addr = s.accept() #get IP and port for connecting application
+		data = conn.recv(BUFFER_SIZE)
+		message = data.decode()
+		print(message)
 
-		data = bytearray(conn.recv(BUFFER_SIZE))
+		while message != "exit":
+			
+			# this is the bytes
+			data = conn.recv(BUFFER_SIZE)
 
-		## play bytes on sound card
-		print(data)
+			# this is the string 
+			message = data.decode()
 
-		#custom packet structure
+			if message == "exit":
+				break
+			print(message)
+			
+			conn.send("Message recieved.".encode())
 
-
-		#generate key file
-
-		with open('key.txt', 'w+') as pad:
-			bits = ['0', '1']
-			key = ""
-			for x in range(len(data)):
-				key += bits[random.randint(0, 1)]
-			pad.write(key)
-
-		#encrypt data
-		key = bytearray(key.encode('ascii'))
-		newdata = []
-		for byte in len(data):
-			newdata.append(str(key[byte]) ^ str(data[byte]))
-		newdata = "".join(newdata)
-		print('data after pad', newdata)
-
-		sd.play(newdata)
+			#Mansoor's shit 
+			sd.play(bytearray(data))
 
 
-        
+
+			#Mansoor's shit ends 
+
 		conn.close()
 
 
