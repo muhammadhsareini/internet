@@ -38,11 +38,26 @@ def runWebServer():
 			conn.send("Message recieved.".encode())
 
 			#Mansoor's shit 
-			sd.play(bytearray(data))
 
+			# create header 
+			# encrypt the data 
+			# bit by bit, create sound 
+			# create the array of tones
+			# play out loud 
 
+			
 
 			#Mansoor's shit ends 
+			data = ''.join(format(x, 'b') for x in bytearray(data))
+			# generate one time pad 
+
+			print('data in binary:\n', data)
+
+			sd.play(bytearray(data.encode()))
+
+
+
+
 
 		conn.close()
 
