@@ -50,7 +50,6 @@ def runWebServer():
 			#Mansoor's shit ends 
 			data = ''.join(format(x, 'b') for x in bytearray(data))
 			# generate one time pad 
-
 			print('data in binary:\n', data)
 
 			sd.play(bytearray(data.encode()))
