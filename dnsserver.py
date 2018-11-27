@@ -13,7 +13,7 @@ BUFFER_SIZE = 4096
 def runDNS(webServerIP):
 
 	## dns lookup table
-	table = {"google.com" : "8.8.8.8", "www.google.com" : "8.8.8.8", "blacksite.secret" : webServerIP}
+	table = {"google.com" : "8.8.8.8", "www.google.com" : "8.8.8.8", "blacksite.it" : webServerIP}
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # set up udp
 	s.bind((UDP_IP, UDP_PORT))
