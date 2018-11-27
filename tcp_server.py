@@ -41,7 +41,10 @@ def runWebServer():
 			#Mansoor's shit 
 
 			# create header 
+			packet = packetize(data)
 			# encrypt the data 
+			
+			
 			# bit by bit, create sound 
 			# create the array of tones
 			# play out loud 
@@ -49,7 +52,7 @@ def runWebServer():
 			
 
 			#Mansoor's shit ends 
-			data = ''.join(format(x, 'b') for x in bytearray(data))
+			data = ''.join(format(x, 'b') for x in bytearray(packet))
 			# generate one time pad 
 			print('data in binary:\n', data)
 
@@ -77,6 +80,34 @@ def play_sound(byteString):
 			sine(frequency=1000, duration=1.0)
 			print("bit: ", bit)
 
+			import array
+
+# max payload size is 255
+# first byte is number of bytes in message
+# second byte is a parity byte
+# next bytes are the encrypted data
+def packetize(data):
+    if len(data) > 255:
+        print("No messages longer than 255")
+    packet = '\0'+'\0'+data
+    packet = array.array('B', packet.encode('ascii'))
+
+    byte1 = packet[0]
+    byte2 = packet[1]
+    byte1 = len(data)
+	#calculate byte parity checksum
+    for i in range(len(data)):
+        packet[1] ^= packet[i+2]
+    print(packet)
+
+	#set up packet
+    result = array.array('B', data.encode('ascii'))
+    result.insert(0,byte1)
+    result.insert(1,packet[1])
+
+    print(result, result.tostring())
+    return result.tostring()
+			
 def main(args):
 	runWebServer()
 
