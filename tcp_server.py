@@ -44,7 +44,7 @@ def runWebServer():
 			#encrypt data
 			with open('key.txt', 'r') as pad:
 				for burn in range(loc_in_file):
-					pad.next()
+					pad.readline()
 				line = pad.readline()
 			#increment reading location in one time pad key file
 			loc_in_file += 1
@@ -69,10 +69,10 @@ def play_sound(byteString):
 	# pass in the binary representation as a string (no spaces)
 	for bit in byteString:
 		if int(bit) == 1:
-			sine(frequency=440, duration=1.0)
+			sine(frequency=440, duration=0.25)
 			print("bit: ", bit)
 		if int(bit) == 0:
-			sine(frequency=1000, duration=1.0)
+			sine(frequency=1000, duration=0.25)
 			print("bit: ", bit)
 
 
