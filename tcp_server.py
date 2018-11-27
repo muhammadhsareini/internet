@@ -5,6 +5,7 @@ import sys
 import sounddevice as sd
 import numpy as np
 import random
+from pysine import sine
 
 TCP_IP = ''
 TCP_PORT = 4000
@@ -54,12 +55,27 @@ def runWebServer():
 
 			sd.play(bytearray(data.encode()))
 
+			# PLAYING SOUND 
+			# pip install pysine
+			play_sound(data)
+			
+
+
 
 
 
 
 		conn.close()
 
+def play_sound(byteString):
+	# pass in the binary representation as a string (no spaces)
+	for bit in byteString:
+		if int(bit) == 1:
+			sine(frequency=440, duration=1.0)
+			print("bit: ", bit)
+		if int(bit) == 0:
+			sine(frequency=1000, duration=1.0)
+			print("bit: ", bit)
 
 def main(args):
 	runWebServer()
