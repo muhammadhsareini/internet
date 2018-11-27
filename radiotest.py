@@ -11,17 +11,21 @@ import scipy.io.wavfile as writer
 
 def main():
 	sdr = RtlSdr()
-	sdr.sample_rate = 3.2e6 #2.048e6
-	sdr.center_freq = 100100000 #70e6
+	sdr.sample_rate = 2.048e6
+	sdr.center_freq = 103900000 #70e6
 	sdr.freq_correction = 60
 	sdr.gain = 'auto'
-	samples = sdr.read_samples(4096)
-	print(samples, type(samples))
+	samples = sdr.read_samples(sdr.sample_rate * 2)
+	# print(samples, type(samples))
 	demod_list = []
 	for ind in range(len(samples)-1):
 		demod_list.append(np.angle(np.conj(samples[ind]) * samples[ind+1]))
 
-	writer.write('sample.wav', 200000, np.array(demod_list))
+	# print(demod_list)
+
+	demod_list = demod_list[::4]
+
+	writer.write('sample.wav', 44100, np.array(demod_list))
 	
 	# client = RtlSdrTcpClient(hostname='192.168.1.100', port=12345)
 	# client.center_freq = 100100000
