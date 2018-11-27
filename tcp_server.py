@@ -5,6 +5,7 @@ import sys
 import sounddevice as sd
 import numpy as np
 import random
+import array
 from pysine import sine
 
 TCP_IP = ''
@@ -30,52 +31,37 @@ def runWebServer():
 			
 			# this is the bytes
 			data = conn.recv(BUFFER_SIZE)
-
 			# this is the string 
 			message = data.decode()
-
 			if message == "exit":
 				break
 			print(message)
-			
 			conn.send("Message recieved.".encode())
 
-			#Mansoor's shit 
-
 			# create header 
-			packet = packetize(data)
-			# encrypt the data 
-			
-			
-			# bit by bit, create sound 
-			# create the array of tones
-			# play out loud 
+			packet = str(packetize(str(data)))
 
 			#encrypt data
-			with open('key.text', 'r') as pad:
+			with open('key.txt', 'r') as pad:
 				for burn in range(loc_in_file):
 					pad.next()
 				line = pad.readline()
+			#increment reading location in one time pad key file
 			loc_in_file += 1
-		
+			key = array.array('B', line.encode('ascii'))
+			packet = array.array('B', packet.encode('ascii'))
+			for byte in range(len(packet)):
+				packet[byte] ^= key[byte]
+			
+			# convert to bit by bit binary
+			packet = ''.join(format(x, 'b') for x in bytearray(packet))
+			print('data in binary:\n', packet)
 
-
-		# key = bytearray(key.encode('ascii'))
-		# newdata = []
-		# for byte in len(data):
-		# 	newdata.append(str(key[byte]) ^ str(data[byte]))
-		# newdata = "".join(newdata)
-		# print('data after pad', newdata)
-
-			data = ''.join(format(x, 'b') for x in bytearray(packet))
-			# generate one time pad 
-			print('data in binary:\n', data)
-
-			sd.play(bytearray(data.encode()))
+			sd.play(bytearray(packet.encode()))
 
 			# PLAYING SOUND 
 			# pip install pysine
-			play_sound(data)
+			play_sound(packet)
 
 		conn.close()
 
@@ -89,7 +75,6 @@ def play_sound(byteString):
 			sine(frequency=1000, duration=1.0)
 			print("bit: ", bit)
 
-			import array
 
 # max payload size is 255
 # first byte is number of bytes in message
@@ -123,6 +108,4 @@ def main(args):
 if __name__ == "__main__":
     main(sys.argv)
 
-#gotta figure out how this works
-# def sendToSound(data):
     
