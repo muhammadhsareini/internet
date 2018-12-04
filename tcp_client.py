@@ -7,11 +7,10 @@
 import socket
 import sys
 
-TCP_IP = ''
 TCP_PORT = 4000
 BUFFER_SIZE = 1024 #might want this to be larger
 
-def runTCPClient():
+def runTCPClient(TCP_IP):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # set up tcp and not udp
 	s.connect((TCP_IP, TCP_PORT))
 
@@ -29,7 +28,7 @@ def runTCPClient():
 
 def main(args):
 	TCP_IP = args[1]
-	runTCPClient()
+	runTCPClient(TCP_IP)
 
 if __name__ == "__main__":
     main(sys.argv)
